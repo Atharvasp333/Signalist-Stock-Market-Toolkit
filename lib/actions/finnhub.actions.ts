@@ -98,7 +98,7 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
   }
 }
 
-export const searchStocks = cache(async (query?: string): Promise<StockWithWatchlistStatus[]> => {
+export const searchStocks = cache(async (query?: string, userId?: string): Promise<StockWithWatchlistStatus[]> => {
   try {
     const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
     if (!token) {
@@ -171,6 +171,28 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
         return item;
       })
       .slice(0, 15);
+
+    // If userId provided, check watchlist status
+    if (userId) {
+      try {
+        const { connectToDatabase } = await import('@/database/mongoose');
+        const { Watchlist } = await import('@/database/models/watchlist.model');
+        await connectToDatabase();
+        
+        const symbols = mapped.map(s => s.symbol);
+        const watchlistItems = await Watchlist.find(
+          { userId, symbol: { $in: symbols } },
+          { symbol: 1 }
+        ).lean();
+        
+        const watchlistSymbols = new Set(watchlistItems.map(item => item.symbol));
+        mapped.forEach(stock => {
+          stock.isInWatchlist = watchlistSymbols.has(stock.symbol);
+        });
+      } catch (err) {
+        console.error('Error checking watchlist status:', err);
+      }
+    }
 
     return mapped;
   } catch (err) {
