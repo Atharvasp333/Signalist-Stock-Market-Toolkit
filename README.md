@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-    <img src="public/readme/hero.webp" alt="Project Banner">
+    <img src="public/readme/dashboard.png" alt="Project Banner">
   <br />
 
   <div>
@@ -37,9 +37,6 @@ AI-powered modern stock market app built with Next.js, Shadcn, Better Auth, and 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
 - **[Better Auth](https://www.better-auth.com/)** is a framework-agnostic authentication and authorization library for TypeScript. It provides built-in support for email/password login, social sign-on (Google, GitHub, Apple, and more), and multi-factor authentication, simplifying user authentication and account management.
-
-- **[CodeRabbit](https://jsm.dev/stocks-coderabbit)** is an AI-powered code review assistant that integrates with GitHub. It helps developers catch bugs, enforce best practices, and maintain consistent code quality across pull requests, reducing manual review effort and speeding up the development workflow.
-
 
 - **[Finnhub](https://finnhub.io/)** is a real-time financial data API that provides stock, forex, and cryptocurrency market data. It offers developers access to fundamental data, economic indicators, and news, making it useful for building trading apps, dashboards, and financial analysis tools.
 
