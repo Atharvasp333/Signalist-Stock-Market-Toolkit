@@ -16,9 +16,23 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
         }
 
         return { success: true, data: response }
-    } catch (e) {
+    } catch (e: any) {
         console.log('Sign up failed', e)
-        return { success: false, error: 'Sign up failed' }
+        
+        // Handle specific error cases
+        if (e?.message?.includes('already exists') || e?.message?.includes('duplicate')) {
+            return { success: false, error: 'An account with this email already exists' }
+        }
+        
+        if (e?.message?.includes('password')) {
+            return { success: false, error: 'Password must be at least 8 characters long' }
+        }
+        
+        if (e?.message?.includes('email') || e?.message?.includes('invalid')) {
+            return { success: false, error: 'Please provide a valid email address' }
+        }
+        
+        return { success: false, error: e?.message || 'Failed to create account. Please try again.' }
     }
 }
 
@@ -27,9 +41,23 @@ export const signInWithEmail = async ({ email, password }: SignInFormData) => {
         const response = await auth.api.signInEmail({ body: { email, password } })
 
         return { success: true, data: response }
-    } catch (e) {
+    } catch (e: any) {
         console.log('Sign in failed', e)
-        return { success: false, error: 'Sign in failed' }
+        
+        // Handle specific error cases
+        if (e?.message?.includes('Invalid email or password') || e?.message?.includes('credentials')) {
+            return { success: false, error: 'Invalid email or password' }
+        }
+        
+        if (e?.message?.includes('not found') || e?.message?.includes('does not exist')) {
+            return { success: false, error: 'No account found with this email' }
+        }
+        
+        if (e?.message?.includes('password')) {
+            return { success: false, error: 'Incorrect password' }
+        }
+        
+        return { success: false, error: e?.message || 'Failed to sign in. Please try again.' }
     }
 }
 

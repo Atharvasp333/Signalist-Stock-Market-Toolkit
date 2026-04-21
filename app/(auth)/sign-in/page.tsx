@@ -26,12 +26,22 @@ const SignIn = () => {
     const onSubmit = async (data: SignInFormData) => {
         try {
             const result = await signInWithEmail(data);
-            if(result.success) router.push('/');
+            
+            if(result.success) {
+                toast.success('Welcome back!', {
+                    description: 'You have successfully signed in.'
+                });
+                router.push('/');
+            } else {
+                toast.error('Sign in failed', {
+                    description: result.error || 'Failed to sign in. Please try again.'
+                });
+            }
         } catch (e) {
             console.error(e);
             toast.error('Sign in failed', {
-                description: e instanceof Error ? e.message : 'Failed to sign in.'
-            })
+                description: e instanceof Error ? e.message : 'An unexpected error occurred.'
+            });
         }
     }
 
