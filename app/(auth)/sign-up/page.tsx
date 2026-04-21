@@ -34,12 +34,22 @@ const SignUp = () => {
     const onSubmit = async (data: SignUpFormData) => {
         try {
             const result = await signUpWithEmail(data);
-            if(result.success) router.push('/');
+            
+            if(result.success) {
+                toast.success('Account created successfully!', {
+                    description: 'Welcome to your investing journey.'
+                });
+                router.push('/');
+            } else {
+                toast.error('Sign up failed', {
+                    description: result.error || 'Failed to create account. Please try again.'
+                });
+            }
         } catch (e) {
             console.error(e);
             toast.error('Sign up failed', {
-                description: e instanceof Error ? e.message : 'Failed to create an account.'
-            })
+                description: e instanceof Error ? e.message : 'An unexpected error occurred.'
+            });
         }
     }
 
